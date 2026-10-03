@@ -1,0 +1,25 @@
+# 原始数据与中间产物：体积大（data/raw 约 203 MB），全部可从公开源重新下载
+data/raw/
+data/finngen/
+data/*.rds
+*.rds
+
+# 运行时生成的报告与图形
+output/figures/
+output/*.txt
+R/_*report.txt
+R/_probe*.txt
+
+# 凭据：OpenGWAS token 绝不入库
+.Renviron
+.env
+
+# Python
+__pycache__/
+*.pyc
+
+# 编辑器与系统
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
