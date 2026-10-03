@@ -395,6 +395,7 @@ def build_main_md():
     dis = read(os.path.join(PROJ, "10_Discussion初稿.md"))
     met = read(os.path.join(PROJ, "16_Methods_EN.md"))
     abst = read(os.path.join(PROJ, "14_Abstract与投稿必需件.md"))
+    intro_md = read(os.path.join(PROJ, "17_Introduction_EN.md"))
     refs = read(os.path.join(PROJ, "15_参考文献表.md"))
 
     # --- ★ 白名单式抽取：只取指定的二级标题块 ---
@@ -469,7 +470,7 @@ def build_main_md():
     parts.append("")
     parts.append("**Corresponding author:** [Name], [Postal address], [Email]")
     parts.append("")
-    parts.append("**Word count:** [main text ~3,800]  |  **Tables:** 2 (+2 supplementary)  |  "
+    parts.append("**Word count:** [main text ~4,700 incl. Introduction ~850]  |  **Tables:** 2 (+2 supplementary)  |  "
                  "**Figures:** 7  |  **References:** 12")
     parts.append("")
     parts.append("---")
@@ -485,11 +486,13 @@ def build_main_md():
     parts.append("")
     parts.append("# 1. Introduction")
     parts.append("")
-    parts.append("[待写 — 约 400 词。建议结构：银屑病的疾病负担与共病 → 体力活动作为"
-                 "modifiable factor 的既有证据与矛盾 → 久坐作为独立暴露的提出 → "
-                 "横断面设计的方向性局限（chicken-and-egg）→ 本研究的目标（观察臂 + "
-                 "双向 MR 的三角互证设计）与预设假设。引言末尾必须写明本文的"
-                 "**预设假设**（primary / secondary）。]")
+    # Introduction 去掉文件顶部的中文说明与末尾的"结构说明"块，只留英文正文
+    _ib = intro_md.split("## 1. Introduction", 1)
+    intro_body = _ib[1] if len(_ib) > 1 else intro_md
+    intro_body = intro_body.split("## 引言的结构说明")[0]
+    intro_body = re.sub(r"^##\s+1\. Introduction\s*$", "", intro_body,
+                        flags=re.M).strip()
+    parts.append(intro_body)
     parts.append("")
     parts.append("---")
     parts.append("")
@@ -499,15 +502,42 @@ def build_main_md():
     parts.append("")
     parts.append("## 2.6 Data availability and code availability")
     parts.append("")
-    parts.append("All data analysed in this study are publicly available. NHANES cycles "
-                 "2009–2010, 2011–2012 and 2013–2014 were obtained from the CDC National "
-                 "Center for Health Statistics. FinnGen release 12 endpoints "
+    parts.append("**Data availability.** All data analysed in this study are publicly "
+                 "available and were obtained without restriction. NHANES cycles "
+                 "2009–2010, 2011–2012 and 2013–2014 were downloaded from the US Centers "
+                 "for Disease Control and Prevention, National Center for Health Statistics "
+                 "(<https://wwwn.cdc.gov/nchs/nhanes/>). FinnGen release 12 endpoints "
                  "L12_PSORIASIS, L12_PSORI_VULG and M13_PSORIARTH were obtained from the "
-                 "FinnGen public release; the leisure screen-time GWAS (GCST90104339) from "
-                 "the GWAS Catalog; UK Biobank summary statistics (ukb-b-5192, ukb-b-4779) via "
-                 "the MRC-IEU OpenGWAS interface; and 1000 Genomes phase 3 EUR linkage "
-                 "disequilibrium data via the Ensembl REST API. Analysis code is available "
-                 "[at: repository URL / Zenodo DOI — to be added].")
+                 "FinnGen public release "
+                 "(<https://storage.googleapis.com/finngen-public-data-r12/>). The leisure "
+                 "screen-time GWAS (GCST90104339) was obtained from the GWAS Catalog "
+                 "(<https://www.ebi.ac.uk/gwas/>). UK Biobank summary statistics "
+                 "(ukb-b-5192, ukb-b-4779) were accessed through the MRC-IEU OpenGWAS "
+                 "interface (<https://gwas.mrcieu.ac.uk/>). The 1000 Genomes phase 3 EUR "
+                 "linkage disequilibrium reference data were accessed through the Ensembl "
+                 "REST API (<https://rest.ensembl.org/>).")
+    parts.append("")
+    parts.append("**Code availability.** The complete analysis pipeline is available at "
+                 "**[REPOSITORY URL — to be added]** (archive: **[ZENODO DOI — to be "
+                 "added]**). The repository contains the R scripts for data construction, "
+                 "survey-weighted analysis, Mendelian randomisation and figure generation, "
+                 "the Python scripts used to retrieve GWAS summary statistics and construct "
+                 "instruments, the key result tables, and the two instrument files used in "
+                 "the genetic analysis. Raw data are not redistributed; the README documents "
+                 "how each source is retrieved. The pipeline is validated by four automated "
+                 "checks — syntax parsing of all scripts, configuration and formula "
+                 "assertions, a dry run of the production data-building code against "
+                 "synthetic data, and a bidirectional citation-integrity check — and the "
+                 "instrument files in the repository reproduce the F statistics reported "
+                 "here.")
+    parts.append("")
+    parts.append("")
+    parts.append("**Author contributions.** [To be completed on submission using the CRediT "
+                 "taxonomy.]")
+    parts.append("")
+    parts.append("**Funding.** [To be completed on submission.]")
+    parts.append("")
+    parts.append("**Competing interests.** [To be completed on submission.]")
     parts.append("")
     parts.append("---")
     parts.append("")
